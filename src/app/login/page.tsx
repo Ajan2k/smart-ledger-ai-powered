@@ -218,12 +218,13 @@ export default function LoginPage() {
                                         Remember me
                                     </label>
                                 </div>
-                                <Link 
-                                    href="/forgot-password" 
-                                    className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                                <button
+                                    type="button"
+                                    onClick={() => toast.info("Password reset is not configured. Since Smart Ledger is self-hosted, please contact your database administrator or reset your password directly in Supabase.")}
+                                    className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors cursor-pointer bg-transparent border-0 p-0"
                                 >
                                     Forgot password?
-                                </Link>
+                                </button>
                             </div>
 
                             {/* 错误信息 */}
