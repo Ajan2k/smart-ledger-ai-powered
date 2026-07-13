@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
     tags JSONB DEFAULT '[]'::jsonb,
     categories JSONB DEFAULT '[]'::jsonb,
     api_token TEXT,
+    session_duration INTEGER NOT NULL DEFAULT 10080,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );

@@ -16,6 +16,7 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
     interface JWT {
         id: string;
+        sessionDuration?: number;
     }
 }
 
@@ -57,6 +58,7 @@ export const authOptions: AuthOptions = {
                     id: user.id,
                     email: user.email,
                     name: user.name,
+                    sessionDuration: user.session_duration || 10080,
                 };
             }
         })
@@ -65,10 +67,22 @@ export const authOptions: AuthOptions = {
         signIn: '/login',
     },
     callbacks: {
-        async jwt({ token, user }: { token: JWT, user: any }) {
+        async jwt({ token, user, trigger, session }: { token: JWT, user: any, trigger?: string, session?: any }) {
             if (user) {
                 token.id = user.id;
+                token.sessionDuration = user.sessionDuration || 10080;
             }
+            
+            // Allow update of session duration on the fly if user changes settings
+            if (trigger === "update" && session?.sessionDuration) {
+                token.sessionDuration = session.sessionDuration;
+            }
+
+            // Dynamically set JWT expiration relative to current request time (sliding expiry)
+            const now = Math.floor(Date.now() / 1000);
+            const durationInSeconds = (token.sessionDuration || 10080) * 60;
+            token.exp = now + durationInSeconds;
+
             return token;
         },
         async session({ session, token }: { session: Session, token: JWT }) {

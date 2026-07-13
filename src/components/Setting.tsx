@@ -23,7 +23,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from '@/components/ui/input'
 import { Label } from "@/components/ui/label"
-import { Settings, Upload, Globe, LogOut, Loader, Key, Mail, Copy, RefreshCw } from "lucide-react"
+import { Settings, Upload, Globe, LogOut, Loader, Key, Mail, Copy, RefreshCw, Clock } from "lucide-react"
 import React, { useState, ChangeEvent, KeyboardEvent, useRef, useEffect } from 'react'
 import { User, EditableUser, Language } from "@/models/user"
 import { toast } from "sonner"
@@ -36,7 +36,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { TAG_COLORS, CURRENCIES, LANGUAGES } from "@/config/constants"
 
 export interface UserProps {
@@ -95,6 +95,7 @@ async function compressImage(file: File, maxSizeKB: number = 128): Promise<strin
 export default function Setting({ user, open, onOpenChange }: UserProps) {
     if (!user) return null;
 
+    const { update: updateSession } = useSession();
     const [loading, setLoading] = useState(false);
     const [isPasswordDrawerOpen, setIsPasswordDrawerOpen] = useState(false);
     const [isEmailDrawerOpen, setIsEmailDrawerOpen] = useState(false);
@@ -108,6 +109,7 @@ export default function Setting({ user, open, onOpenChange }: UserProps) {
         tags: user.tags,
         categories: user.categories || [],
         apiToken: user.apiToken,
+        sessionDuration: user.sessionDuration || 10080,
         stats: user.stats
     });
 
@@ -208,6 +210,15 @@ export default function Setting({ user, open, onOpenChange }: UserProps) {
                 ...res.data,
                 stats: user.stats
             });
+            
+            if (res.data.sessionDuration) {
+                try {
+                    await updateSession({ sessionDuration: res.data.sessionDuration });
+                } catch (err) {
+                    console.error('Failed to update session:', err);
+                }
+            }
+            
             toast.success('Settings saved successfully');
         } catch (error) {
             console.error('Failed to save settings:', error);
@@ -532,6 +543,38 @@ export default function Setting({ user, open, onOpenChange }: UserProps) {
                                     ))}
                                 </SelectContent>
                             </Select>
+                        </div>
+
+                        {/* Session Expiration Section */}
+                        <div className="space-y-2">
+                            <Label className="flex items-center gap-1.5 text-sm font-medium">
+                                <Clock className="h-4 w-4 text-gray-500" />
+                                Session Expiration Timeout
+                            </Label>
+                            <Select
+                                value={String(state.sessionDuration || 10080)}
+                                onValueChange={(value) => {
+                                    setState(prev => ({
+                                        ...prev,
+                                        sessionDuration: Number(value)
+                                    }));
+                                }}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select session timeout" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="10">10 Minutes (Max security)</SelectItem>
+                                    <SelectItem value="30">30 Minutes</SelectItem>
+                                    <SelectItem value="60">1 Hour</SelectItem>
+                                    <SelectItem value="720">12 Hours</SelectItem>
+                                    <SelectItem value="1440">1 Day</SelectItem>
+                                    <SelectItem value="10080">7 Days (Default)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <p className="text-[10px] text-gray-400">
+                                Sets how long you stay logged in after inactivity. Choosing 10 minutes will auto-logout after 10 minutes of idle time.
+                            </p>
                         </div>
                         <hr />
 

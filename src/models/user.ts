@@ -52,6 +52,7 @@ export type User = {
   createdAt: string;
   updatedAt: string;
   apiToken?: string;
+  sessionDuration?: number;
 };
 
 export type EditableUser = Omit<User, 'id' | 'role' | 'createdAt' | 'updatedAt'>;

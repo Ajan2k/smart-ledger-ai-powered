@@ -111,6 +111,7 @@ export async function GET(req: Request) {
                 avatar: user.avatar,
                 language: user.language,
                 currency: user.currency,
+                sessionDuration: user.session_duration || 10080,
                 locations: (user.locations || []).map((loc: any) => ({
                     id: String(loc.id),
                     name: loc.name,
@@ -158,7 +159,7 @@ export async function PATCH(req: Request) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
         }
 
-        const { name, avatar, language, currency, locations, tags, categories } = await req.json();
+        const { name, avatar, language, currency, locations, tags, categories, sessionDuration } = await req.json();
         await connectMongoose();
 
         // Helper to format tags/locations/categories with IDs for compatibility
@@ -184,6 +185,7 @@ export async function PATCH(req: Request) {
         if (locations) updateData.locations = cleanArrayItems(locations);
         if (tags) updateData.tags = cleanArrayItems(tags);
         if (categories) updateData.categories = cleanArrayItems(categories);
+        if (sessionDuration !== undefined) updateData.session_duration = sessionDuration;
         
         updateData.updated_at = new Date().toISOString();
 
@@ -228,6 +230,7 @@ export async function PATCH(req: Request) {
                     color: cat.color,
                     description: cat.description,
                 })),
+                sessionDuration: updatedUser.session_duration || 10080,
                 createdAt: new Date(updatedUser.created_at).toISOString(),
                 updatedAt: new Date(updatedUser.updated_at).toISOString()
             }
