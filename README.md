@@ -1,294 +1,211 @@
-# Smart Ledger 👋
-Smart Ledger is a **self-hosted, LLM-powered, multi-input personal expense tracking system** designed for privacy-conscious users who want intelligent automation without sacrificing data ownership.
+# Smart Ledger ✦
 
-<div style="display: flex; gap: 12px; flex-wrap: wrap;">
-  <img src="imgs/home.png" alt="HomePage.png" height="400">
-  <img src="imgs/edit.png" alt="Card.png" height="400">
-  <img src="imgs/setting.png" alt="Setting.png" height="400">
-</div>
-<div style="display: flex; gap: 12px; flex-wrap: wrap;">
-  <img src="imgs/shortcut.png" alt="EditPage.png" height="400">
-  <img src="imgs/speech.png" alt="Voice.png" height="400">
-  <img src="imgs/picture.png" alt="Picture.png" height="400">
-</div>
-
-## ⭐ Key Features 
-- 🛡️ **Self-hosted** 
-Deploy Smart Ledger on your own server or machine. Your financial data remains **fully under your control**  — no third-party storage, no data tracking. Seamlessly **sync across devices**  to keep your records accessible and consistent.
-
-- 🎙️ **Voice Input** 
-Record spoken expense entries. Powered by **Whisper**  for speech recognition and integrated with an **LLM**  for context understanding, Smart Ledger can convert your voice into clean, structured financial transactions with ease.
-
-- 📷 **Picture Input** 
-Snap photos of receipts or bills. Smart Ledger uses **multi-LLM models** to automatically extract key financial details like amount, date, and category — no manual typing required.
-
-- 💻 **Beautiful User Interface** 
-Enjoy a modern, mobile-friendly UI built with **Next.js**. Designed for simplicity and speed. Can be added to your home screen and run in **fullscreen like a native app**  on iOS/macOS — no need to go through the App Store. Just open in Safari and "Add to Home Screen."
-
-
-- 💱 **Multi-Currency Support** 
-Automatically detects and converts multiple currencies from input (voice, image, or text) — perfect for international usage or travel expense tracking.
- 
-
-- 🏷️ **Tagging & Categorization** 
-Add your own custom tags or let the AI suggest and infer tags based on transaction content. Smart Ledger helps keep your records organized effortlessly.
-
-- 🔒 **Full Privacy & Control** 
-All components are **open-source and self-manageable** . No vendor lock-in, no hidden data sharing — just transparent software that puts you in charge.
-
-
-## 🛣️ Planned Direction
-
-The following changes are planned for future development:
-
-1. **Frontend-first storage, optional backend**
-   - Remove the hard dependency on MongoDB. The app will become **frontend-first**: data is stored in **IndexedDB** by default.
-   - **Backend sync is optional**: users can optionally sync data to a server for backup or cross-device use. When used, the backend can still use MongoDB (or another database) for persistence.
-
-2. **Separate UIs for desktop and mobile**
-   - **Mobile**: use [Framework7](https://framework7.io/) for a native-feel mobile UI.
-   - **Desktop**: framework for the desktop UI is not yet decided (TBD).
-
-
-## 🚀 Quickstart 
-
-### 🗣️ Install Whisper Transcription Server (Required)
-Smart Ledger uses a separate FastAPI-based Whisper server (powered by faster-whisper) to handle speech-to-text transcription.
-
-**Requirements**
-
-- 3.8 < Python < 3.12
- 
-- `ffmpeg` installed (for `pydub` to work)
- 
-- A machine with CPU or CUDA-compatible GPU
-
-**Install dependencies**
-
-Go to `/whisper`
-```bash
-pip install -r requirements.txt
-```
-**Prepare environment variables**
-
-Create a `.env` file in the root of the whisper server directory.
-
-
-```bash
-cp .env.example .env
-```
-
-**Run the server**
-
-
-
-```bash
-python whisper_server.py
-```
-
-Or with `uvicorn`:
-
-
-```bash
-uvicorn whisper_server:app --host 0.0.0.0 --port 8000
-```
-
-If you want to use cuda: install cuDNN at https://developer.nvidia.com/cudnn-downloads
-
----
-### ☁️ Run in Vercel
-1. Import the GitHub repo into Vercel
-2. Configure Environment Variables 
-In the Vercel dashboard, go to your project's Settings > Environment Variables and add the following (based on .env.example)
-
-| Key                     | Description                                             |
-| ----------------------- | ------------------------------------------------------- |
-| `MONGODB_URI`           | Your MongoDB connection string.                         |
-| `MONGODB_DB`            | The database name                                       |
-| `NEXTAUTH_URL`          | Your Vercel domain (e.g. `https://your-app.vercel.app`) |
-| `NEXTAUTH_SECRET`       | A random secret string                                  |
-| `GEMINI_API_KEY`        | Your Gemini API key                                     |
-| `GEMINI_MODEL`          | e.g. `gemini-2.0-flash`                                 |
-| `INVITE_CODE`           | Invite code, used for register                 |
-| `TRANSCRIPTION_URL`     | Your Whisper server URL                                 |
-| `TRANSCRIPTION_API_KEY` | Your Whisper service                                    |
-| `EXCHANGE_RATE_API_KEY` | Currency exchange API key                               |
-
-
-3. Click "Deploy"
-Vercel will build and deploy your app automatically. It may take 1–2 minutes.
-
-4. Done!
-You’ll get a live URL like https://smartledger-yourname.vercel.app.
+Smart Ledger is an elegant, **self-hosted, AI-powered personal finance assistant** designed for privacy-conscious users. It transforms voice recordings, receipt images, and natural conversational text into structured financial transactions under your absolute control.
 
 ---
 
-### 💻 Run In Your sever 
-1. **Clone the repository** 
+<p align="center">
+  <img src="imgs/home.png" alt="Dashboard" width="30%" />
+  <img src="imgs/setting.png" alt="Settings" width="30%" />
+  <img src="imgs/edit.png" alt="Edit Transaction" width="30%" />
+</p>
 
+<p align="center">
+  <img src="imgs/shortcut.png" alt="Shortcut View" width="30%" />
+  <img src="imgs/speech.png" alt="Voice Recording" width="30%" />
+  <img src="imgs/picture.png" alt="Receipt Upload" width="30%" />
+</p>
 
-```bash
-git clone https://github.com/bestxxt/SmartLedger.git
-cd smart-ledger
-```
- 
-2. **Install dependencies** 
+---
 
+## 🌟 Key Features
 
-```bash
-npm install
-```
- 
-3. **Set up environment variables** 
-Copy `.env.example` and rename it:
+*   🛡️ **Self-Hosted & Private**
+    Your financial data is yours alone. Deployed with Supabase (PostgreSQL), keeping all database records under your direct ownership.
+*   🎙️ **Voice Intelligence**
+    Tap, record, and let AI do the rest. Converts spoken transactions (including multi-item expense lists in a single sentence) into clean, structured records using **Groq's Whisper** transcription.
+*   📷 **Receipt Vision Parsing**
+    Snap a photo of any receipt or invoice. The app utilizes high-capacity vision models (**Llama 3.2 90B Vision**) to automatically extract merchant, amounts, items, taxes, currency, and categorization.
+*   🧠 **LLM-Driven Categorization & Tagging**
+    Intelligently suggests categories, generates appropriate transaction notes, and infers tags based on your previous spending history and preferences.
+*   🔄 **Automatic Multi-Currency Exchange**
+    Automatically detects transaction currencies, retrieves live exchange rates via **ExchangeRate-API**, and converts entries into your base currency seamlessly.
+*   📲 **PWA (Progressive Web App)**
+    Add to your home screen on iOS or Android for a fullscreen, fast, and native-feeling mobile app experience.
+*   🔒 **Secure Multi-User Setup**
+    Complete user isolation, verification emails powered by **Resend**, and a secure **Invite Code** system to prevent unauthorized public signups on your instance.
+*   ⚡ **Apple Shortcuts Integration**
+    Build quick capture workflows directly from your iPhone camera or share sheet using the integrated API Token endpoint.
 
+---
 
-```bash
-cp .env.example .env.local
-```
+## 🛠️ Tech Stack
 
+*   **Frontend**: Next.js 15 (App Router), React 18, Tailwind CSS v4, Framer Motion (animations), Radix UI (accessible primitives).
+*   **Database**: Supabase (PostgreSQL).
+*   **Authentication**: NextAuth.js.
+*   **AI Services**: Groq SDK (Whisper-large-v3, Llama-3.1-70b-versatile, Llama-3.2-90b-vision-preview).
+*   **Integrations**: Resend (Transactional Email verification), ExchangeRate-API (Currency Rates lookup).
 
-Then fill in the required values like **MongoDB URI, API keys, etc**.
- 
-4. **Run the app in development** 
+---
 
+## 🚀 Setup & Installation
 
-```bash
-npm run dev
-```
+### 1. Database Configuration (Supabase)
 
-### **(Optional) Run in background using PM2** 
-[PM2]()  is a production-grade process manager for Node.js applications. It keeps your app running in the background, automatically restarts it on crash or reboot, and makes it easy to manage logs and processes.
+1. Create a project on [Supabase](https://supabase.com).
+2. Go to the **SQL Editor** in your Supabase dashboard.
+3. Copy the contents of [`supabase_schema.sql`](file:///d:/personal%20projects/SmartLedger/supabase_schema.sql) and execute the queries to initialize the database tables:
+    *   `users`: Stores credentials, settings, categories, and tags.
+    *   `transactions`: Stores income and expense records.
+    *   `verification_codes`: Stores email OTP verification codes.
+    *   `pending_transactions`: Temporarily caches API/Shortcut transactions before confirmation.
 
-**Install PM2 globally**
+### 2. Environment Variables Setup
 
+Create a `.env.local` file in the root directory (based on [`example.env`](file:///d:/personal%20projects/SmartLedger/example.env)) and populate the following keys:
 
-```bash
-npm install -g pm2
-```
+```env
+# SUPABASE DATABASE
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 
+# AUTHENTICATION
+NEXTAUTH_SECRET=a-secure-random-secret-key
+NEXTAUTH_URL=http://localhost:3000
 
-**Build the Next.js app (if not already done)**
+# EMAIL SERVICE (Resend)
+RESEND_API_KEY=your-resend-api-key
 
-If you're deploying the production build:
+# GROQ AI MODELS Configuration
+GROQ_API_KEY=your-groq-api-key
+GROQ_MODEL=llama-3.1-70b-versatile
+GROQ_VISION_MODEL=llama-3.2-90b-vision-preview
 
-```bash
-npm run build
-```
+# USER ACCESS SECURITY
+INVITE_CODE=your-secret-invite-code-for-registration
 
-**Start the app with PM2**
+# CURRENCY EXCHANGE RATES
+EXCHANGE_RATE_API_KEY=your-exchangerate-api-key
 
-```bash
-pm2 start "npm run start" --name smart-ledger
-```
-
- 
-- `npm run start` starts your Next.js app in production mode.
- 
-- `--name smart-ledger` assigns a name to your process for easy management.
-
-
-**Save the PM2 process list**
-
-
-This ensures your app will restart automatically on system reboot.
-
-
-
-```bash
-pm2 save
-```
-
-
-**🔁 (Optional) Set up PM2 to start on boot**
-
-
-
-```bash
-pm2 startup
-```
-
-Follow the printed instructions (it will give you a command to run, e.g. `sudo env PATH=... pm2 startup systemd -u youruser --hp /home/youruser`).
-
-**Monitor or manage the process**
-
-```bash
-pm2 list              # View all running apps
-pm2 logs smart-ledger # View logs for your app
-pm2 restart smart-ledger # Restart the app
-pm2 stop smart-ledger    # Stop the app
+# CORS CONFIGURATION
+ALLOWED_ORIGIN=http://localhost:3000
 ```
 
-## 🎬 Demo Videos 
+---
 
+## 💻 Running the App Locally
 
-### 🎙️ Voice Input Demo (Multiple Expenses + Income) 
+Ensure you have [Node.js (v18+)](https://nodejs.org) installed.
 
-This video demonstrates Smart Ledger's ability to process natural voice input and generate multiple transactions — including both **expenses**  and **income**  — in a single sentence.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Ajan2k/smart-ledger-ai-powered.git
+   cd smart-ledger-ai-powered
+   ```
 
-> I said: I had lunch with colleagues at a Korean restaurant, spent 28 dollars.
-> On my way home I stopped to get gas, paid 40 dollars.
-> Also, I received my salary today — 8000 dollars just landed in my account.”
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-<img src="imgs/voice-demo.gif" alt="voice-demo.gif" height="400">
+3. **Start the local development server**
+   ```bash
+   npm run dev
+   ```
+   Open `http://localhost:3000` in your web browser.
 
+---
 
-### 📷 Receipt Image Input Demo 
+## 📦 Deploying in Production
 
-This video shows how Smart Ledger extracts transaction details from a receipt image using **Multi LLM Model**  and generates a structured expense record.
+### Deploys to Vercel
+1. Push your code to your GitHub repository.
+2. Link your repository to Vercel.
+3. Configure all environment variables in your Vercel project settings.
+4. Click **Deploy**. Vercel will build and host your App Router endpoints automatically.
 
-<img src="imgs/image-demo.gif" alt="image-demo.gif" height="400">
+### Running with PM2 (Linux Server / VPS)
+PM2 is a production-grade daemon process manager to run Next.js continuously:
 
+1. Install PM2 globally:
+   ```bash
+   npm install -g pm2
+   ```
+2. Build the production build:
+   ```bash
+   npm run build
+   ```
+3. Start the process:
+   ```bash
+   pm2 start "npm run start" --name smart-ledger
+   ```
+4. Save the active process configuration to start on reboot:
+   ```bash
+   pm2 save
+   pm2 startup
+   ```
 
+---
 
-## 🚧 Development Progress 
+## ⚡ Apple Shortcuts Integration (iOS Guide)
 
-> Current Version: `v0.1.0` (Alpha)
+Smart Ledger features an interactive verification API workflow. This lets you snap a photo on your iPhone, preview the AI-extracted transaction text, and save the transaction directly upon confirmation.
 
-### ✅ Core
-- [x] User login
-- [x] User logout
-- [x] Change password and email used to login
-- [x] User authentication and multi-device sync
-- [x] Admin account management
-- [x] User registration
-- [x] iPhone shortcut support
-- [ ] Google login
-- [ ] WeChat login
-- [ ] Multi-user account support
-- [ ] Offline mode (local caching)
-- [ ] Export to Excel / CSV
-- [ ] Forgot password
+### How it works:
 
-### 🎨 User Interface 
-- [x] Homepage with expense list
-- [x] Voice / Camera / Text input modes
-- [x] Transaction edit & delete cards
-- [x] Settings page (language, currency, tag management...)
-- [x] Spending trend visualization
-- [x] Installable fullscreen Web App (PWA-style experience)
-- [ ] Transaction search and filters (in progress)
-- [ ] Statistic page
-- [ ] Export page
+```mermaid
+sequenceDiagram
+    participant iPhone as iOS Apple Shortcut
+    participant Server as Smart Ledger Server
+    participant DB as Supabase Database
 
+    iPhone->>Server: POST /api/shortcut/upload (headers: x-api-token, body: image)
+    Note over Server: LLM parses receipt image & converts currency
+    Server->>DB: Insert temporary cache in pending_transactions
+    Server-->>iPhone: Returns transaction preview text & temporary ID
+    iPhone->>iPhone: Display confirmation prompt with preview text
+    opt User confirms transaction
+        iPhone->>Server: GET /api/shortcut/upload (headers: x-api-token, id)
+        Server->>DB: Move transaction to 'transactions' & delete cache
+        Server-->>iPhone: Returns "🥳 Success!"
+    end
+```
 
-### 🧠 AI Features
-- [x] Voice input via Whisper
-- [x] Receipt image recognition (LLM-based parsing)
-- [x] Auto-categorization and tag suggestions via LLM
-- [x] Multi-currency detection and handling
+### iOS Shortcut Setup:
 
-### 📦 Deploy
-- [x] Vercel support
-- [ ] Docker support
+1. Log in to Smart Ledger on your browser.
+2. Navigate to the **Settings** page and click **Generate API Token**. Copy this key.
+3. Open the **Shortcuts App** on your iOS device and build a custom shortcut following these actions:
+    *   **Take Photo** (or select a file).
+    *   **Get Contents of URL** (Send POST to `https://<your-domain>/api/shortcut/upload`):
+        *   Request Headers: `x-api-token` : `<YOUR_API_TOKEN>`
+        *   Request Body (Form): Key `image` set to your input photo/file.
+    *   **Get Value for Key `result` and `id`** from the returned JSON response.
+    *   **Show Alert** (or "Choose from Menu") containing the `result` text asking if you'd like to save it.
+    *   If confirmed, **Get Contents of URL** (Send GET to `https://<your-domain>/api/shortcut/upload`):
+        *   Request Headers:
+            *   `x-api-token` : `<YOUR_API_TOKEN>`
+            *   `id` : `<THE_ID_VALUE_FROM_POST>`
 
+---
 
-## 📄 License 
+## 🎬 Feature Demos
 
-Smart Ledger is open-source and released under the [MIT License](https://mit-license.org/).
+### 🎙️ Audio Transcription & Multiline Processing
+Capture multiple records (both expenses and income) in a single spoken paragraph:
 
+> *"I had lunch with colleagues at a Korean restaurant, spent 28 dollars. On my way home I stopped to get gas, paid 40 dollars. Also, I received my salary today — 8000 dollars just landed in my account."*
 
+![Voice Demo](imgs/voice-demo.gif)
 
+### 📷 Receipt Scanner Vision Demo
+Parse a complex paper receipt image dynamically:
 
+![Image Scan Demo](imgs/image-demo.gif)
 
+---
 
+## 📄 License
+
+This project is licensed under the [MIT License](https://mit-license.org/).
