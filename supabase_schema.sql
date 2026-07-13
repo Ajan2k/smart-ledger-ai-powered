@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     tags JSONB DEFAULT '[]'::jsonb,
     location TEXT,
     emoji TEXT,
+    account TEXT DEFAULT 'inhand' CHECK (account IN ('inhand', 'account')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );

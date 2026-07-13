@@ -44,6 +44,8 @@ export type User = {
     totalIncome: number;
     totalExpense: number;
     balance: number;
+    inHandBalance?: number;
+    accountBalance?: number;
     totalTransactions: number;
     monthlyBalances?: { month: string; balance: number }[];
   };

@@ -13,6 +13,7 @@ export type Transaction = {
     tags?: string[];
     location?: string;
     emoji?: string;
+    account?: 'inhand' | 'account';
     createdAt: string;
     updatedAt: string;
 };

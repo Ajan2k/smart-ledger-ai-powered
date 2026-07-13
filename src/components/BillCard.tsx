@@ -83,8 +83,16 @@ export function BillCard({ transaction, onEdit }: BillCardProps) {
                         )}
                     </div>
                 </CardContent>
-                <CardFooter className="pt-0 text-xs text-gray-500">
+                <CardFooter className="pt-0 text-xs text-gray-500 flex justify-between items-center w-full pr-24">
                     <p>{transaction.location || "No location"}</p>
+                    <span className={cn(
+                        "px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider select-none shrink-0",
+                        transaction.account === 'account' 
+                            ? "bg-purple-100 text-purple-700 border border-purple-200" 
+                            : "bg-amber-100 text-amber-700 border border-amber-200"
+                    )}>
+                        {transaction.account === 'account' ? '💳 Account' : '💵 In Hand'}
+                    </span>
                 </CardFooter>
                 <div className="absolute bottom-4 right-4 flex gap-4">
                     <button

@@ -44,6 +44,27 @@ export default function CurrentBalance() {
           {growth >= 0 ? '+' : ''}{growth.toFixed(1)}% from last month
         </div>
       </div>
+
+      {/* Account Balance split */}
+      <div className="grid grid-cols-2 gap-4 mt-5 pt-4 border-t border-gray-100">
+        <div className="space-y-1 bg-amber-50/60 border border-amber-100/60 p-3 rounded-2xl flex flex-col justify-center">
+          <div className="text-gray-500 text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5 select-none">
+            <span>💵</span> In Hand
+          </div>
+          <div className="text-lg font-bold text-amber-800">
+            {currencySymbol}<FormattedNumber value={(user.stats.inHandBalance || 0).toFixed(2)} />
+          </div>
+        </div>
+        <div className="space-y-1 bg-purple-50/60 border border-purple-100/60 p-3 rounded-2xl flex flex-col justify-center">
+          <div className="text-gray-500 text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5 select-none">
+            <span>💳</span> In Account
+          </div>
+          <div className="text-lg font-bold text-purple-800">
+            {currencySymbol}<FormattedNumber value={(user.stats.accountBalance || 0).toFixed(2)} />
+          </div>
+        </div>
+      </div>
+
       <div className="mt-4 w-full h-[80%]">
         <ResponsiveContainer width="100%" height={100}>
           <LineChart data={chartData} margin={{ left: 15, right: 15, top: 5, bottom: 0 }}>

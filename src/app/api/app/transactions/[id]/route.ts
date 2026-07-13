@@ -42,6 +42,7 @@ export async function GET(
       tags: record.tags || [],
       location: record.location,
       emoji: record.emoji,
+      account: record.account || 'inhand',
       createdAt: new Date(record.created_at).toISOString(),
       updatedAt: new Date(record.updated_at).toISOString(),
     };
@@ -71,7 +72,7 @@ export async function PATCH(
 
     // Whitelist editable fields
     const { id: _, ...rawUpdates } = updates;
-    const allowedFields = ['amount', 'originalAmount', 'type', 'category', 'timestamp', 'note', 'currency', 'originalCurrency', 'tags', 'location', 'emoji'];
+    const allowedFields = ['amount', 'originalAmount', 'type', 'category', 'timestamp', 'note', 'currency', 'originalCurrency', 'tags', 'location', 'emoji', 'account'];
     const safeUpdates: any = Object.fromEntries(
         Object.entries(rawUpdates).filter(([k]) => allowedFields.includes(k))
     );
@@ -140,6 +141,7 @@ export async function PATCH(
     if (safeUpdates.tags !== undefined) dbUpdates.tags = safeUpdates.tags;
     if (safeUpdates.location !== undefined) dbUpdates.location = safeUpdates.location;
     if (safeUpdates.emoji !== undefined) dbUpdates.emoji = safeUpdates.emoji;
+    if (safeUpdates.account !== undefined) dbUpdates.account = safeUpdates.account;
     dbUpdates.updated_at = new Date().toISOString();
 
     const { data: updated, error: updateError } = await supabase
@@ -168,6 +170,7 @@ export async function PATCH(
       tags: updated.tags || [],
       emoji: updated.emoji,
       location: updated.location,
+      account: updated.account || 'inhand',
       createdAt: new Date(updated.created_at).toISOString(),
       updatedAt: new Date(updated.updated_at).toISOString(),
     };

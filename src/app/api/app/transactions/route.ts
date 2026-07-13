@@ -105,6 +105,7 @@ export async function GET(req: Request): Promise<NextResponse> {
       tags: doc.tags || [],
       emoji: doc.emoji,
       location: doc.location,
+      account: doc.account || 'inhand',
       createdAt: new Date(doc.created_at).toISOString(),
       updatedAt: new Date(doc.updated_at).toISOString(),
     }));
@@ -133,7 +134,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     // Always treat amount/currency as originalAmount/originalCurrency
     const originalAmount = body.originalAmount !== undefined ? body.originalAmount : body.amount;
     const originalCurrency = body.originalCurrency || body.currency;
-    const { type, category, timestamp } = body;
+    const { type, category, timestamp, account = 'inhand' } = body;
     if (originalAmount == null || !type || !category || !timestamp) {
       return NextResponse.json(
         { message: 'Missing required fields: amount, type, category or timestamp' },
@@ -191,6 +192,7 @@ export async function POST(req: Request): Promise<NextResponse> {
         tags: body.tags || [],
         location: body.location,
         emoji: body.emoji,
+        account,
       })
       .select()
       .single();
@@ -216,6 +218,7 @@ export async function POST(req: Request): Promise<NextResponse> {
       emoji: savedTransaction.emoji,
       tags: savedTransaction.tags || [],
       location: savedTransaction.location,
+      account: savedTransaction.account || 'inhand',
       createdAt: new Date(savedTransaction.created_at).toISOString(),
       updatedAt: new Date(savedTransaction.updated_at).toISOString(),
     };

@@ -50,7 +50,8 @@ export class AIService {
                     "currency": string,                           // Currency mentioned in Text else context.currency
                     "location": string (optional),                // Match from context.locations
                     "emoji": string,                              // One emoji best representing the transaction
-                    "tags": string[]                              // Relevant from context.tags
+                    "tags": string[],                             // Relevant from context.tags
+                    "account": "inhand" | "account"               // 'inhand' (cash payment, cash receipt) or 'account' (card payment, GPay, UPI, net banking, online transfer receipt). Infer from transaction text/receipt details. Default to 'inhand' if not clear or unspecified.
                 }
             }
             If no transaction is detected, return:

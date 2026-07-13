@@ -52,6 +52,7 @@ export default function PopupEdit({ transaction, open, onOpenChange }: PopupEdit
         tags: transaction?.tags || [],
         location: transaction?.location || '',
         emoji: transaction?.emoji || '💰',
+        account: transaction?.account || 'inhand',
     });
 
     const [aiInput, setAiInput] = useState('');
@@ -93,6 +94,7 @@ export default function PopupEdit({ transaction, open, onOpenChange }: PopupEdit
                 tags: transaction.tags || [],
                 location: transaction.location || '',
                 emoji: transaction.emoji || '💰',
+                account: transaction.account || 'inhand',
             });
         }
     }, [transaction]);

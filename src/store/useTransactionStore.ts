@@ -120,6 +120,7 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
                 tags: txData.tags,
                 location: txData.location,
                 emoji: txData.emoji,
+                account: txData.account || 'inhand',
             };
             const res = await fetch('/api/app/transactions', {
                 method: 'POST',

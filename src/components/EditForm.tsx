@@ -419,6 +419,23 @@ export default function EditForm({
               </div>
             </DialogContent>
           </Dialog>
+
+          {/* Account Selector */}
+          <div className="flex items-center gap-2 border border-gray-300 px-2 rounded-md h-10">
+            <span className="text-gray-500 text-xs font-semibold uppercase tracking-wider shrink-0 select-none">Account:</span>
+            <Select
+              value={formData.account || 'inhand'}
+              onValueChange={(val) => handleChange({ account: val as 'inhand' | 'account' })}
+            >
+              <SelectTrigger className="w-full border-none shadow-none focus:ring-0 focus:ring-offset-0 p-0 h-full bg-transparent">
+                <SelectValue placeholder="Select Account" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inhand">💵 In Hand (Cash)</SelectItem>
+                <SelectItem value="account">💳 In Account (GPay/Bank)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
 

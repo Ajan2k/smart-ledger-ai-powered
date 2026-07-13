@@ -29,7 +29,7 @@ export async function GET(req: Request) {
         // Fetch transaction metrics
         const { data: transData, error: transError } = await supabase
             .from('transactions')
-            .select('amount, type, timestamp')
+            .select('amount, type, timestamp, account')
             .eq('user_id', session.user.id);
 
         if (transError) {
@@ -38,19 +38,33 @@ export async function GET(req: Request) {
 
         let totalIncome = 0;
         let totalExpense = 0;
+        let inHandIncome = 0;
+        let inHandExpense = 0;
+        let accountIncome = 0;
+        let accountExpense = 0;
         const totalCount = transData?.length || 0;
 
         if (transData) {
             for (const item of transData) {
                 const amt = Number(item.amount);
-                if (item.type === 'income') {
+                const isIncome = item.type === 'income';
+                const isExpense = item.type === 'expense';
+                const acc = item.account || 'inhand';
+
+                if (isIncome) {
                     totalIncome += amt;
-                } else if (item.type === 'expense') {
+                    if (acc === 'inhand') inHandIncome += amt;
+                    else if (acc === 'account') accountIncome += amt;
+                } else if (isExpense) {
                     totalExpense += amt;
+                    if (acc === 'inhand') inHandExpense += amt;
+                    else if (acc === 'account') accountExpense += amt;
                 }
             }
         }
         const balance = totalIncome - totalExpense;
+        const inHandBalance = inHandIncome - inHandExpense;
+        const accountBalance = accountIncome - accountExpense;
 
         // Generate past 8 months array
         const now = new Date();
@@ -120,6 +134,8 @@ export async function GET(req: Request) {
                     totalIncome,
                     totalExpense,
                     balance,
+                    inHandBalance,
+                    accountBalance,
                     totalCount,
                     monthlyBalances
                 },
