@@ -655,12 +655,26 @@ export default function DashboardPage() {
           </h2>
           
           {chartData.length > 1 && (
-            <div className="mt-4 w-full h-[60px]">
+            <div className="mt-4 w-full h-[120px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData} margin={{ left: 5, right: 5, top: 5, bottom: 5 }}>
+                <LineChart data={chartData} margin={{ left: 0, right: 0, top: 8, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="balanceGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#2563eb" stopOpacity={0.15} />
+                      <stop offset="100%" stopColor="#2563eb" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
                   <XAxis
                     dataKey="month"
-                    hide={true}
+                    tick={{ fontSize: 10, fill: "#9ca3af" }}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(m) => {
+                      if (typeof m !== 'string') return '';
+                      const monthNum = Number(m.split('-')[1]);
+                      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                      return months[monthNum - 1] || m;
+                    }}
                   />
                   <YAxis hide={true} domain={['auto', 'auto']} />
                   <Tooltip 
@@ -671,15 +685,15 @@ export default function DashboardPage() {
                       const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                       return months[monthNum - 1] || m;
                     }}
-                    contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb', fontSize: '12px' }}
+                    contentStyle={{ borderRadius: '10px', border: '1px solid #e5e7eb', fontSize: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
                   />
                   <Line 
                     type="monotone" 
                     dataKey="balance" 
                     stroke="#2563eb" 
-                    strokeWidth={2} 
-                    dot={false}
-                    activeDot={{ r: 4, fill: '#3b82f6' }}
+                    strokeWidth={2.5} 
+                    dot={{ r: 3.5, fill: '#fff', stroke: '#2563eb', strokeWidth: 2 }}
+                    activeDot={{ r: 5, fill: '#2563eb', stroke: '#fff', strokeWidth: 2 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
