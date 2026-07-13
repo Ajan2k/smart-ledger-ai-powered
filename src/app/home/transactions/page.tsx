@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { RefreshCw, Filter, Plus } from "lucide-react"
 import { toast } from "sonner";
 import PopupEdit from '@/components/PopupEdit';
-import CurrentBalance from '@/components/CurrentBalance';
 import TransactionList from '@/components/TransactionList';
 import Setting from '@/components/Setting';
 import Head from "@/components/Head";
@@ -105,7 +104,6 @@ export default function TransactionsPage() {
         <main className="relative flex items-start justify-center min-h-screen bg-[#F8F8F7]" >
             <div className="w-full max-w-md pb-28">
                 <Head onMenuClick={() => setIsSettingOpen(true)} />
-                <CurrentBalance />
 
                 <div className="relative my-2">
                     <div className="absolute inset-0 flex items-center">
