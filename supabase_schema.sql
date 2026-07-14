@@ -56,3 +56,24 @@ CREATE TABLE IF NOT EXISTS pending_transactions (
     data JSONB NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- Upcoming Transactions Table (planned future expenses/income)
+CREATE TABLE IF NOT EXISTS upcoming_transactions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    amount NUMERIC NOT NULL,
+    original_amount NUMERIC,
+    type TEXT NOT NULL CHECK (type IN ('income', 'expense')),
+    category TEXT NOT NULL,
+    expected_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    note TEXT,
+    currency TEXT,
+    original_currency TEXT,
+    tags JSONB DEFAULT '[]'::jsonb,
+    location TEXT,
+    emoji TEXT,
+    account TEXT DEFAULT 'inhand' CHECK (account IN ('inhand', 'account')),
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'cancelled')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);

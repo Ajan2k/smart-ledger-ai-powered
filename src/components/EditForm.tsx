@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import NumericKeypad from "@/components/NumericKeypad";
 import { EditableTransaction } from "@/models/transaction";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "./ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose, DialogFooter } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
 import { useUserStore } from '@/store/useUserStore';
 import { CURRENCIES, EMOJI_LIST, INITIAL_CATEGORIES } from "@/config/constants";
@@ -417,6 +417,11 @@ export default function EditForm({
                   onTagsChange={(tags) => handleChange({ tags })}
                 />
               </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button className="w-full h-10 cursor-pointer">Done</Button>
+                </DialogClose>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
 
@@ -467,6 +472,11 @@ export default function EditForm({
                 ))}
               </div>
             </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button className="w-full h-10 cursor-pointer">Done</Button>
+              </DialogClose>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </CardFooter>

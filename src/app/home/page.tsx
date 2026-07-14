@@ -14,7 +14,8 @@ import {
   Calendar as CalendarIcon,
   ArrowRightLeft,
   ArrowDown,
-  Loader2
+  Loader2,
+  CalendarClock
 } from 'lucide-react';
 import { toast } from "sonner";
 import Head from "@/components/Head";
@@ -56,6 +57,7 @@ import {
   XAxis,
   YAxis
 } from 'recharts';
+import { useRouter } from 'next/navigation';
 
 const COLORS = [
   "#3b82f6", // Blue
@@ -100,6 +102,7 @@ const initialFilters: DashboardFilters = {
 
 export default function DashboardPage() {
   const { user, queryUser } = useUserStore();
+  const router = useRouter();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -728,6 +731,34 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+
+        {/* Expected Balance Card */}
+        {(user.stats.upcomingCount ?? 0) > 0 && (
+          <div 
+            className="bg-gradient-to-br from-orange-50 to-amber-50 p-5 mx-4 my-2 rounded-2xl shadow-sm border border-orange-100 cursor-pointer hover:shadow-md transition-shadow duration-200"
+            onClick={() => router.push('/home/upcoming')}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-gray-600 text-sm font-medium">Expected Balance</span>
+              <span className="text-[11px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+                <CalendarClock className="w-3 h-3" />
+                {user.stats.upcomingCount} planned
+              </span>
+            </div>
+            <h2 className="text-2xl font-bold text-orange-800">
+              {currencySymbol}<FormattedNumber value={(user.stats.expectedBalance ?? user.stats.balance).toFixed(2)} />
+            </h2>
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-xs text-gray-500">
+                After all planned {user.stats.upcomingExpense ? `expenses (-${currencySymbol}${(user.stats.upcomingExpense).toFixed(2)})` : 'transactions'}
+                {user.stats.upcomingIncome ? ` & income (+${currencySymbol}${(user.stats.upcomingIncome).toFixed(2)})` : ''}
+              </span>
+            </div>
+            <p className="text-[10px] text-orange-600 font-medium mt-2">
+              Tap to view & manage →
+            </p>
+          </div>
+        )}
 
         {/* Transfer Dialog */}
         <Dialog open={isTransferOpen} onOpenChange={setIsTransferOpen}>

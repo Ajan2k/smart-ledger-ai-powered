@@ -44,6 +44,10 @@ export type User = {
     totalIncome: number;
     totalExpense: number;
     balance: number;
+    expectedBalance?: number;
+    upcomingExpense?: number;
+    upcomingIncome?: number;
+    upcomingCount?: number;
     inHandBalance?: number;
     accountBalance?: number;
     totalTransactions: number;

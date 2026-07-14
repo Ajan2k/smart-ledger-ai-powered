@@ -100,6 +100,30 @@ export async function GET(req: Request) {
             return { month: m, balance: runningBalance };
         });
 
+        // Compute expected balance from pending upcoming transactions
+        const { data: upcomingData, error: upcomingError } = await supabase
+            .from('upcoming_transactions')
+            .select('amount, type')
+            .eq('user_id', session.user.id)
+            .eq('status', 'pending');
+
+        if (upcomingError) {
+            console.error('Upcoming transactions fetch error:', upcomingError);
+        }
+
+        let upcomingExpense = 0;
+        let upcomingIncome = 0;
+        let upcomingCount = 0;
+        if (upcomingData) {
+            upcomingCount = upcomingData.length;
+            for (const item of upcomingData) {
+                const amt = Number(item.amount);
+                if (item.type === 'income') upcomingIncome += amt;
+                else if (item.type === 'expense') upcomingExpense += amt;
+            }
+        }
+        const expectedBalance = balance - upcomingExpense + upcomingIncome;
+
         return NextResponse.json({
             message: 'ok',
             data: {
@@ -135,6 +159,10 @@ export async function GET(req: Request) {
                     totalIncome,
                     totalExpense,
                     balance,
+                    expectedBalance,
+                    upcomingExpense,
+                    upcomingIncome,
+                    upcomingCount,
                     inHandBalance,
                     accountBalance,
                     totalCount,
