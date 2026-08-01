@@ -33,7 +33,7 @@ Smart Ledger is an elegant, **self-hosted, AI-powered personal finance assistant
 *   📲 **PWA (Progressive Web App)**
     Add to your home screen on iOS or Android for a fullscreen, fast, and native-feeling mobile app experience.
 *   🔒 **Secure Multi-User Setup**
-    Complete user isolation, verification emails powered by **Resend**, and a secure **Invite Code** system to prevent unauthorized public signups on your instance.
+    Complete user isolation, verification emails sent via **SMTP (nodemailer)**, and a secure **Invite Code** system to prevent unauthorized public signups on your instance.
 *   ⚡ **Apple Shortcuts Integration**
     Build quick capture workflows directly from your iPhone camera or share sheet using the integrated API Token endpoint.
 
@@ -45,7 +45,7 @@ Smart Ledger is an elegant, **self-hosted, AI-powered personal finance assistant
 *   **Database**: Supabase (PostgreSQL).
 *   **Authentication**: NextAuth.js.
 *   **AI Services**: Groq SDK (Whisper-large-v3, Llama-3.1-70b-versatile, Llama-3.2-90b-vision-preview).
-*   **Integrations**: Resend (Transactional Email verification), ExchangeRate-API (Currency Rates lookup).
+*   **Integrations**: SMTP/Nodemailer (Transactional Email verification), ExchangeRate-API (Currency Rates lookup).
 
 ---
 
@@ -74,8 +74,13 @@ SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 NEXTAUTH_SECRET=a-secure-random-secret-key
 NEXTAUTH_URL=http://localhost:3000
 
-# EMAIL SERVICE (Resend)
-RESEND_API_KEY=your-resend-api-key
+# EMAIL SERVICE (SMTP)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+SMTP_FROM_EMAIL=Smart Ledger <your-email@gmail.com>
 
 # GROQ AI MODELS Configuration
 GROQ_API_KEY=your-groq-api-key

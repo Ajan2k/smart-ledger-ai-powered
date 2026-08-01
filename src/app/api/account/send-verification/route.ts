@@ -1,10 +1,18 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 import { connectMongoose, supabase } from '@/lib/db';
 import { authRateLimiter } from '@/lib/rate-limit';
 
-// Initialize Resend with your API key
-const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_key');
+// Initialize SMTP transporter
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: Number(process.env.SMTP_PORT) || 587,
+  secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
 // Generate a random 6-digit code
 function generateVerificationCode(): string {
@@ -68,9 +76,9 @@ export async function POST(request: Request) {
     };
     const safeName = escapeHtml(name);
     
-    // Send verification email
-    const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'Smart Ledger <onboarding@resend.dev>',
+    // Send verification email via SMTP
+    await transporter.sendMail({
+      from: process.env.SMTP_FROM_EMAIL || `Smart Ledger <${process.env.SMTP_USER}>`,
       to: email,
       subject: 'Your Smart Ledger Verification Code',
       html: `
@@ -89,14 +97,6 @@ export async function POST(request: Request) {
       `,
     });
 
-    if (error) {
-      console.error('Error sending email:', error);
-      return NextResponse.json(
-        { message: 'Failed to send verification code' },
-        { status: 500 }
-      );
-    }
-
     return NextResponse.json(
       { message: 'Verification code sent successfully' },
       { status: 200 }
@@ -104,7 +104,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error in send-verification:', error);
     return NextResponse.json(
-      { message: 'Internal server error' },
+      { message: 'Failed to send verification code' },
       { status: 500 }
     );
   }
