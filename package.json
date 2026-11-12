@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:voice": "node --env-file=.env test/test_voice.js"
   },
   "dependencies": {
     "@auth/core": "^0.34.2",

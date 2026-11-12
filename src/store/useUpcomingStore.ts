@@ -51,7 +51,7 @@ export const useUpcomingStore = create<UpcomingState>((set, get) => ({
                 tags: data.tags,
                 location: data.location,
                 emoji: data.emoji,
-                account: data.account || 'inhand',
+                account: data.account || 'account',
             };
             const res = await fetch('/api/app/upcoming-transactions', {
                 method: 'POST',

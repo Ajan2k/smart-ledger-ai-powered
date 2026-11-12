@@ -52,7 +52,7 @@ export default function PopupEdit({ transaction, open, onOpenChange }: PopupEdit
         tags: transaction?.tags || [],
         location: transaction?.location || '',
         emoji: transaction?.emoji || '💰',
-        account: transaction?.account || 'inhand',
+        account: transaction?.account || 'account',
     });
 
     const [aiInput, setAiInput] = useState('');
@@ -94,7 +94,7 @@ export default function PopupEdit({ transaction, open, onOpenChange }: PopupEdit
                 tags: transaction.tags || [],
                 location: transaction.location || '',
                 emoji: transaction.emoji || '💰',
-                account: transaction.account || 'inhand',
+                account: transaction.account || 'account',
             });
         }
     }, [transaction]);
@@ -113,6 +113,7 @@ export default function PopupEdit({ transaction, open, onOpenChange }: PopupEdit
             tags: [],
             location: '',
             emoji: '💰',
+            account: 'account',
         });
     }
 
@@ -137,6 +138,7 @@ export default function PopupEdit({ transaction, open, onOpenChange }: PopupEdit
                     tags: [],
                     location: '',
                     emoji: '💰',
+                    account: 'account',
                 });
                 setAiInput('');
             }
@@ -176,6 +178,7 @@ export default function PopupEdit({ transaction, open, onOpenChange }: PopupEdit
                     tags: t.tags,
                     location: t.location,
                     emoji: t.emoji,
+                    account: t.account || prev.account || 'account',
                 }));
                 toast.success('Recognition successful. Form auto-filled.');
             } else {
@@ -220,6 +223,7 @@ export default function PopupEdit({ transaction, open, onOpenChange }: PopupEdit
                         tags: data.result.tags || [],
                         location: data.result.location || undefined,
                         emoji: data.result.emoji,
+                        account: data.result.account || prev.account || 'account',
                     }));
                 } else {
                     toast.error('Failed to recognize transaction.');
@@ -287,6 +291,7 @@ export default function PopupEdit({ transaction, open, onOpenChange }: PopupEdit
                         tags: t.tags || [],
                         location: t.location || '',
                         emoji: t.emoji || '💰',
+                        account: t.account || prev.account || 'account',
                     }));
                 } else {
                     toast.error('Audio recognition failed');

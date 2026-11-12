@@ -73,14 +73,21 @@ export default function LoginPage() {
                 redirect: false,
             });
 
-            if (result?.error) {
+            if (result?.error || !result?.ok) {
                 setError('Invalid email or password');
                 return;
             }
-            // Optionally, you can use toast notifications for success
+
+            // Confirm the session cookie is actually readable before navigating.
+            // A hard redirect can otherwise outrun the Set-Cookie commit and
+            // land on /home with no session, bouncing straight back to /login.
+            const session = await getSession();
+            if (!session) {
+                setError('Could not establish a session. Please try again.');
+                return;
+            }
+
             toast.success('Login successful!');
-            // router.push('/home');
-            // Force immediate redirect
             window.location.href = '/home';
         } catch (error) {
             setError('An error occurred. Please try again.');

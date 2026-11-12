@@ -56,7 +56,7 @@ export class AIService {
                         "location": string (optional),                // Match from context.locations
                         "emoji": string,                              // One emoji best representing the transaction
                         "tags": string[],                             // Relevant from context.tags
-                        "account": "inhand" | "account"               // 'inhand' (cash, physical wallet, hand over cash) or 'account' (GPay, bank transaction, card payment, digital transfer, online payment, UPI). Infer from text if mentioned (e.g., "paid cash" -> 'inhand', "gpayed" -> 'account'). Default to 'inhand' if not clear or unspecified.
+                        "account": "inhand" | "account"               // 'inhand' (cash, physical wallet, hand over cash) or 'account' (GPay, bank transaction, card payment, digital transfer, online payment, UPI). Infer from text if mentioned (e.g., "paid cash" -> 'inhand', "gpayed" -> 'account'). Default to 'account' if not clear or unspecified.
                     }
                 ]
             }

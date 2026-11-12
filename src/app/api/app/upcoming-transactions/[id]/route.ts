@@ -93,7 +93,7 @@ export async function PATCH(
       emoji: updated.emoji,
       tags: updated.tags || [],
       location: updated.location,
-      account: updated.account || 'inhand',
+      account: updated.account || 'account',
       status: updated.status,
       createdAt: new Date(updated.created_at).toISOString(),
       updatedAt: new Date(updated.updated_at).toISOString(),

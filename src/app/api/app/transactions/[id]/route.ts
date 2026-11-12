@@ -42,7 +42,7 @@ export async function GET(
       tags: record.tags || [],
       location: record.location,
       emoji: record.emoji,
-      account: record.account || 'inhand',
+      account: record.account || 'account',
       createdAt: new Date(record.created_at).toISOString(),
       updatedAt: new Date(record.updated_at).toISOString(),
     };
